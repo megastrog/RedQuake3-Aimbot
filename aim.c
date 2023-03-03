@@ -509,10 +509,11 @@ int main(int argc, char *argv[])
         if(enable == 1)
         {
             // always tracks sps
+            const int spson = key_is_pressed(XK_H);
             static uint64_t st = 0;
             if(microtime() - st >= 1000000)
             {
-                if(key_is_pressed(XK_H))
+                if(spson == 1)
                 {
                     if(minimal > 0){system("clear");}
                     printf("\e[36mSPS: %u\e[0m", sps);
@@ -589,7 +590,7 @@ int main(int argc, char *argv[])
             }
 
             // target
-            if(left == 1 || four > 0 || autoshoot == 1)
+            if(spson == 1 || left == 1 || four > 0 || autoshoot == 1)
                 targetEnemy();
 
             // crosshair
