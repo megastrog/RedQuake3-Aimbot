@@ -34,7 +34,7 @@
 // #define COLOR_DETECT cr == 0 && cg == 0 && cb == 0 // black
 #define SCAN_DELAY 1000
 int sd=50;
-int sx=50, sy=50;
+int sd2=100;
 
 // other
 #define uint unsigned int
@@ -189,23 +189,19 @@ Window getNextChild(Display* d, Window current)
 void targetEnemy()
 {
     // get image block
-    XImage *img = XGetImage(d, twin, cx-sx, cy-sy, sx*2, sy*2, AllPlanes, XYPixmap);
+    XImage *img = XGetImage(d, twin, cx-sd, cy-sd, sd2, sd2, AllPlanes, XYPixmap);
     if(img == NULL)
         return;
 
     // increment scans per second
     sps++;
 
-    // pre-compute vars
-    const float sy2 = sy*2;
-    const float sx2 = sx*2;
-
     // top left detection
     int ax = 0, ay = 0;
     uint b1 = 0;
-    for(int y = 0; y < sy2; y++)
+    for(int y = 0; y < sd2; y++)
     {
-        for(int x = 0; x < sx2; x++)
+        for(int x = 0; x < sd2; x++)
         {
             const unsigned long pixel = XGetPixel(img, x, y);
             const unsigned char cr = (pixel & img->red_mask) >> 16;
@@ -231,9 +227,9 @@ void targetEnemy()
     // bottom right detection
     int bx = 0, by = 0;
     uint b2 = 0;
-    for(int y = sy2; y > 0; y--)
+    for(int y = sd2; y > 0; y--)
     {
-        for(int x = sx2; x > 0; x--)
+        for(int x = sd2; x > 0; x--)
         {
             const unsigned long pixel = XGetPixel(img, x, y);
             const unsigned char cr = (pixel & img->red_mask) >> 16;
@@ -262,12 +258,12 @@ void targetEnemy()
         // center on target
         const int dx = abs(ax-bx)/2;
         const int dy = abs(ay-by)/2;
-        int mx = (ax-sx)+dx;
-        int my = (ay-sy)+dy;
+        int mx = (ax-sd)+dx;
+        int my = (ay-sd)+dy;
         
         // prevent the mouse jumping too large distances
-        if(mx > sx){mx=sx;}
-        if(my > sx){my=sx;}
+        if(mx > sd){mx=sd;}
+        if(my > sd){my=sd;}
 
         // only move the mouse if one of the mx or my is > 0
         if(mx != 0 || my != 0){xdo_move_mouse_relative(xdo, mx, my);}
@@ -587,7 +583,7 @@ int main(int argc, char *argv[])
                         sd = 25;
                     else
                         sd = 50;
-                    sx = sd, sy = sd;
+                    sd2 = sd/2;
                     usleep(300000);
                 }
             }
@@ -600,7 +596,7 @@ int main(int argc, char *argv[])
             if(crosshair == 1)
             {
                 XSetForeground(d, gc, 65280);
-                XDrawRectangle(d, twin, gc, cx-sx-1, cy-sy-1, (sx*2)+2, (sy*2)+2);
+                XDrawRectangle(d, twin, gc, cx-sd-1, cy-sd-1, sd2+2, sd2+2);
                 XFlush(d);
             }
         }
