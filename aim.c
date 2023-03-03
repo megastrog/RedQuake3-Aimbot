@@ -583,7 +583,7 @@ int main(int argc, char *argv[])
                         sd = 25;
                     else
                         sd = 50;
-                    sd2 = sd/2;
+                    sd2 = sd*2;
                     usleep(300000);
                 }
             }
