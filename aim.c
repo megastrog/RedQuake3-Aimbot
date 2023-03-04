@@ -29,7 +29,7 @@
 
 // user configurable (if you really want to)
 // #define COLOR_DETECT cr < 43 && cg > 180 && cb > 180 // aqua
-#define COLOR_DETECT cr > 160 && cg < 13 && cb < 13 // red
+#define COLOR_DETECT cr > 60 && cg < 13 && cb < 13 // red
 // #define COLOR_DETECT cr < 63 && cg < 63 && cb > 180 // blue
 // #define COLOR_DETECT cr == 0 && cg == 0 && cb == 0 // black
 #define SCAN_DELAY 1000
@@ -81,7 +81,11 @@ int left=0, right=0, middle=0, four=0;
 void *mouseThread(void *arg)
 {
     int fd = open("/dev/input/mice", O_RDWR);
-    if(fd == -1){return 0;}
+    if(fd == -1)
+    {
+        printf("Failed to open '/dev/input/mice' mouse input is non-operable.\n");
+        return 0;
+    }
     unsigned char data[3];
     while(1)
     {
