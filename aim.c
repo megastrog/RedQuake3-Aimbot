@@ -29,7 +29,7 @@
 
 // user configurable (if you really want to)
 // #define COLOR_DETECT cr < 43 && cg > 180 && cb > 180 // aqua
-#define COLOR_DETECT cr > 60 && cg < 13 && cb < 13 // red
+#define COLOR_DETECT cr > 160 && cg < 13 && cb < 13 // red
 // #define COLOR_DETECT cr < 63 && cg < 63 && cb > 180 // blue
 // #define COLOR_DETECT cr == 0 && cg == 0 && cb == 0 // black
 #define SCAN_DELAY 1000
