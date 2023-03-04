@@ -3,7 +3,7 @@
     James William Fletcher (github.com/mrbid)
 --------------------------------------------------
         MARCH 2023
-        ~~~~~~~~~~~~~
+        ~~~~~~~~~~
 
     This is for Quake Live & ioQuake3.
     - Force enemy models to Red Doom Guy.
