@@ -98,7 +98,6 @@ void *mouseThread(void *arg)
     }
     close(fd);
 }
-
 Window getWindow(Display* d, const int si) // gets child window mouse is over
 {
     XEvent event;
@@ -473,9 +472,9 @@ int main(int argc, char *argv[])
             xdo_mouse_up(xdo, CURRENTWINDOW, 1);
             sd = 50, sd2 = 100, sr = sd2+br;
         }
-        else
+        else if(left == 0)
         {
-            if(left == 0){sd = 50, sd2 = 100, sr = sd2+br;} // reset scan
+            sd = 50, sd2 = 100, sr = sd2+br; // reset scan
         }
 
         // inputs
