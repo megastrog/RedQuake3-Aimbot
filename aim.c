@@ -322,7 +322,6 @@ void reprint()
         rainbow_line_printf("L-CTRL + L-ALT = Toggle BOT ON/OFF\n");
         rainbow_line_printf("R-CTRL + R-ALT = Toggle HOTKEYS ON/OFF\n");
         rainbow_line_printf("MOUSE1/MOUSE4 = Target Enemy.\n");
-        rainbow_line_printf("F = Flip scan area size.\n");
         rainbow_line_printf("O = Toggle autoshoot.\n");
         rainbow_line_printf("P = Toggle crosshair.\n");
         rainbow_line_printf("H = Hold pressed to print scans per second.\n");
@@ -593,17 +592,6 @@ int main(int argc, char *argv[])
                         usleep(300000);
                         reprint();
                     }
-                }
-
-                // scan size flippening
-                if(key_is_pressed(XK_F))
-                {
-                    if(sd == 50)
-                        sd = 25;
-                    else
-                        sd = 50;
-                    sd2 = sd*2;
-                    usleep(300000);
                 }
             }
 
