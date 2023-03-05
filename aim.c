@@ -270,6 +270,7 @@ void targetEnemy()
             sd  = ady;
             sd2 = sd*2;
             sr = sd2+br;
+            if(sr > 160){sr = 160;}
         }
         
         // prevent the mouse jumping too large distances
