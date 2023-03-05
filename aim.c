@@ -28,13 +28,9 @@
 #include <fcntl.h>
 
 // user configurable (if you really want to)
-// #define COLOR_DETECT cr < 43 && cg > 180 && cb > 180 // aqua
-#define COLOR_DETECT cr > 160 && cg < 13 && cb < 13 // red
-// #define COLOR_DETECT cr < 63 && cg < 63 && cb > 180 // blue
-// #define COLOR_DETECT cr == 0 && cg == 0 && cb == 0 // black
 #define SCAN_DELAY 1000
-int sd=50;
-int sd2=100;
+unsigned char sr = 160, sg = 13, sb = 13;
+unsigned char br = 60;
 
 // other
 #define uint unsigned int
@@ -43,14 +39,16 @@ Display *d;
 int si;
 Window twin;
 Window this_win = 0;
-uint sps = 0;
 int cx=0, cy=0;
-uint64_t attack = 0;
 uint minimal = 0;
 uint enable = 0;
 uint crosshair = 1;
 uint hotkeys = 1;
 uint autoshoot = 0;
+uint64_t attack = 0;
+uint sps = 0;
+int sd=50;
+int sd2=100;
 
 /***************************************************
    ~~ Utils
@@ -211,7 +209,7 @@ void targetEnemy()
             const unsigned char cr = (pixel & img->red_mask) >> 16;
             const unsigned char cg = (pixel & img->green_mask) >> 8;
             const unsigned char cb = pixel & img->blue_mask;
-            if(COLOR_DETECT)
+            if(cr > sr && cg < sg && cb < sb)
             {
                 ax = x, ay = y;
                 b1 = 1;
@@ -239,7 +237,7 @@ void targetEnemy()
             const unsigned char cr = (pixel & img->red_mask) >> 16;
             const unsigned char cg = (pixel & img->green_mask) >> 8;
             const unsigned char cb = pixel & img->blue_mask;
-            if(COLOR_DETECT)
+            if(cr > sr && cg < sg && cb < sb)
             {
                 bx = x, by = y;
                 b2 = 1;
@@ -261,13 +259,22 @@ void targetEnemy()
     {
         // center on target
         const int dx = abs(ax-bx)/2;
-        const int dy = abs(ay-by)/2;
+        const int ady = abs(ay-by);
+        const int dy = ady/2;
         int mx = (ax-sd)+dx;
         int my = (ay-sd)+dy;
+
+        // resize scan window
+        if(ady > 10 && ady < 100)
+        {
+            sd  = ady;
+            sd2 = sd*2;
+            sr = sd2+br;
+        }
         
         // prevent the mouse jumping too large distances
-        if(mx > sd){mx=sd;}
-        if(my > sd){my=sd;}
+        // if(mx > sd){mx=sd;}
+        // if(my > sd){my=sd;}
 
         // only move the mouse if one of the mx or my is > 0
         if(mx != 0 || my != 0){xdo_move_mouse_relative(xdo, mx, my);}
@@ -309,7 +316,7 @@ void reprint()
 
     if(minimal == 0)
     {
-        printf("\033[1m\033[1;31m>>> RedQuake3 Aimbot v1 by MegaStrog <<<\e[0m\n");
+        printf("\033[1m\033[1;31m>>> RedQuake3 Aimbot v2 by MegaStrog <<<\e[0m\n");
         rainbow_line_printf("original code by the loser below\n");
         rainbow_line_printf("James Cuckiam Fletcher (github.com/mrbid)\n\n");
         rainbow_line_printf("L-CTRL + L-ALT = Toggle BOT ON/OFF\n");
@@ -432,7 +439,7 @@ int main(int argc, char *argv[])
     if(minimal > 0)
     {
         xdo_get_active_window(xdo, &this_win);
-        xdo_set_window_property(xdo, this_win, "WM_NAME", "RedQuake3 Aimbot V1");
+        xdo_set_window_property(xdo, this_win, "WM_NAME", "RedQuake3 Aimbot V2");
         xdo_set_window_size(xdo, this_win, 600, 1, 0);
         MakeAlwaysOnTop(d, XDefaultRootWindow(d), this_win);
     }
@@ -462,7 +469,14 @@ int main(int argc, char *argv[])
 
         // trigger timeout
         if(autoshoot == 1 && attack-microtime() > 333000)
+        {
             xdo_mouse_up(xdo, CURRENTWINDOW, 1);
+            sd = 50, sd2 = 100, sr = sd2+br;
+        }
+        else
+        {
+            if(left == 0){sd = 50, sd2 = 100, sr = sd2+br;} // reset scan
+        }
 
         // inputs
         if(key_is_pressed(XK_Control_L) && key_is_pressed(XK_Alt_L))
