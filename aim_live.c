@@ -5,14 +5,7 @@
         June 2023
         ~~~~~~~~~~
 
-    This is for Quake Live & ioQuake3.
-    - Force enemy models to Red Doom Guy.
-
-    Because player models in Quake 3 can be affected by
-    shadows and lighting; in v2 I reduce the red tolerance
-    as the target lockon to the enemy and reduces in diameter.
-    This allows a lockon to hold while a player model runs
-    into darker more shadowed areas. 
+    This is optimised for Quake Live.
     
     Prereq:
     sudo apt install clang xterm libx11-dev libxdo-dev
